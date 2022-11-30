@@ -37,6 +37,9 @@ public class Usuario {
 	@NotNull
 	@Size(min = 3, max = 15, message = "Error en el ingreso del nombre")
 	private String nombre;
+	
+	@NotNull
+	private String apellido;
 
 	@NotNull
 	private String correo;
@@ -158,6 +161,14 @@ public class Usuario {
 		this.direcciones = direcciones;
 	}
 
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
 	// atributos de control
 	// agregar a la columna la fecha antes de insertar
 	@PrePersist
@@ -169,5 +180,4 @@ public class Usuario {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
-
 }
