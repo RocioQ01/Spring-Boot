@@ -9,8 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "direcciones")
+@Table(name="direcciones")
 public class Direccion {
 
 	@Id
@@ -20,10 +22,31 @@ public class Direccion {
 	private String nombre;
 	private String numeracion;
 	
-	//Relacion ManyToONe
+	//relacion ManyToOne, esta entidad se quedara con la columna FK
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="usuario_id")//Quien tenga el "joincolumn" se queda con la FK(foreing key)
+	@JoinColumn(name="usuario_id")
 	private Usuario usuario;
+
+	public Direccion() {
+		super();
+	}
+
+	public Direccion(Long id, String nombre, String numeracion, Usuario usuario) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.numeracion = numeracion;
+		this.usuario = usuario;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -39,6 +62,14 @@ public class Direccion {
 
 	public void setNumeracion(String numeracion) {
 		this.numeracion = numeracion;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

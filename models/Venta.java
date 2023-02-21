@@ -15,18 +15,21 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "ventas")
+@Table(name="ventas")
 public class Venta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Float monto;
-
-	// ManyToMany
+	
+	//ManyToMany
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "autos_ventas", // nombre de la tabla relacional
-			joinColumns = @JoinColumn(name = "venta_id"), inverseJoinColumns = @JoinColumn(name = "auto_id"))
+	@JoinTable(
+			name="autos_ventas",//nombre de la tabla relacional 
+			joinColumns = @JoinColumn(name="venta_id"),
+			inverseJoinColumns = @JoinColumn(name="auto_id")
+			)
 	private List<Auto> autos;
 
 	public Venta(Long id, Float monto, List<Auto> autos) {
@@ -63,5 +66,6 @@ public class Venta {
 	public void setAutos(List<Auto> autos) {
 		this.autos = autos;
 	}
+	
 
 }

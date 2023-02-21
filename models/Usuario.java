@@ -37,31 +37,39 @@ public class Usuario {
 	@NotNull
 	@Size(min = 3, max = 15, message = "Error en el ingreso del nombre")
 	private String nombre;
-	
+
 	@NotNull
+	@Size(min = 3, max = 15, message = "Error en el ingreso del apellido")
 	private String apellido;
 
 	@NotNull
 	private String correo;
 	@NotNull
 	private String password;
+	
+	@Column(name="foto", length= Integer.MAX_VALUE,nullable= true)
+	private byte[] foto;
+	
 
-	// relacion OneToOne
-	@JsonIgnore // permite eliminar error de recursividad
-	@OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//relacion OneToOne
+	@JsonIgnore //permite eliminar error de recursividad
+	@OneToOne(mappedBy = "usuario",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private Auto auto;
-
-	// relacion OneToMany persistencia
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	
+	//relacion OneToMany persistencia
+	@OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Direccion> direcciones;
 
-	// ManyToMany
+	//ManyToMany
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "roles_usuarios", // nombre de la tabla relacional
-			joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
+	@JoinTable(
+			name="roles_usuarios",//nombre de la tabla relacional 
+			joinColumns = @JoinColumn(name="usuario_id"),
+			inverseJoinColumns = @JoinColumn(name="rol_id")
+			)
 	private List<Rol> roles;
-
+	
 	@Transient
 	private String password2;
 
@@ -77,13 +85,14 @@ public class Usuario {
 
 	@Range(min = 40, max = 300, message = "Peso fuera de rango")
 	private Float peso;
-
+	
 	@Column(updatable = false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date updatedAt;
+	
 
 	public Usuario() {
 		super();
@@ -152,7 +161,6 @@ public class Usuario {
 	public void setAuto(Auto auto) {
 		this.auto = auto;
 	}
-
 	public List<Direccion> getDirecciones() {
 		return direcciones;
 	}
@@ -160,7 +168,6 @@ public class Usuario {
 	public void setDirecciones(List<Direccion> direcciones) {
 		this.direcciones = direcciones;
 	}
-
 	public String getApellido() {
 		return apellido;
 	}
@@ -168,8 +175,15 @@ public class Usuario {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+	public byte[] getFoto() {
+		return foto;
+	}
 
-	// atributos de control
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
+	}
+
+	// atributos de control 
 	// agregar a la columna la fecha antes de insertar
 	@PrePersist
 	protected void onCreate() {
@@ -180,4 +194,5 @@ public class Usuario {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+
 }

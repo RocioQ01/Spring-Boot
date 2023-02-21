@@ -7,7 +7,7 @@ import cl.generation.web.models.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
-	//Objeto: Usuario (T), Tipo de PK: Long (ID)
-	//Logica de manipulacion de datos (CRUD+)
-
+	//logica de manipulacion de datos (CRUD+)
+	Usuario findByCorreo(String correo);
+	Usuario findByNick(String nick);
 }

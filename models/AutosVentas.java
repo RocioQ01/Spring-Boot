@@ -17,25 +17,19 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "autos_ventas")
+@Table(name="autos_ventas")
 public class AutosVentas {
-
+	//tabla relacional para agregar columnas adicionales
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private Integer cantidad;
 	private Float valorUnitario;
-	private Float total; //cantidad+valorUnitario
+	private Float total;//cantidad*valorUnitario
 	
-	@Column(updatable = false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date createdAt;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date updatedAt;
+	//Relacion ManyToMany = 2 ManyToOne
 	
-	//Relacion ManyToMany es igual a dos ManyToOne
 	//1 ManyToOne
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="auto_id")
@@ -45,20 +39,24 @@ public class AutosVentas {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="venta_id")
 	private Venta venta;
+	
+	@Column(updatable = false)
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date createdAt;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date updatedAt;
 
 	public AutosVentas() {
 		super();
 	}
 
-	public AutosVentas(Long id, Integer cantidad, Float valorUnitario, Float total, Date createdAt, Date updatedAt,
-			Auto auto, Venta venta) {
+	public AutosVentas(Long id, Integer cantidad, Float valorUnitario, Float total, Auto auto, Venta venta) {
 		super();
 		this.id = id;
 		this.cantidad = cantidad;
 		this.valorUnitario = valorUnitario;
 		this.total = total;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 		this.auto = auto;
 		this.venta = venta;
 	}
@@ -95,22 +93,6 @@ public class AutosVentas {
 		this.total = total;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
 	public Auto getAuto() {
 		return auto;
 	}
@@ -126,7 +108,6 @@ public class AutosVentas {
 	public void setVenta(Venta venta) {
 		this.venta = venta;
 	}
-
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
@@ -135,7 +116,6 @@ public class AutosVentas {
 	@PreUpdate
 	protected void onUpdate() {
 		this.updatedAt = new Date();
-
 	}
 	
 }

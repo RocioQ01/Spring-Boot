@@ -1,6 +1,7 @@
 package cl.generation.web.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,53 +13,63 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.generation.web.models.Usuario;
 import cl.generation.web.services.UsuarioServiceImpl;
 
-
 @RestController
 public class UsuarioApiRestController {
-	@Autowired //Para inyectar informacion del implement
+	@Autowired
 	private UsuarioServiceImpl usuarioServiceImpl;
 	
-	@RequestMapping("/guardar/usuario") //Inserta datos y guarda datos
-	public Usuario guardarUsuario(@RequestBody Usuario usuario) { //Capturar datos de un usuario desde el cuerpo de una peticion
+	@RequestMapping("/guardar/usuario")
+	public String guardarUsuario(@RequestBody Usuario usuario) {
+		//http://localhost:8080/guardar/usuario
 		/*
-		 * {
-		 * nombre:"Mijail",
-		 * correo:"a@a.cl",
-		 * password: "secret"
-		 * }
-		 * */
-		return usuarioServiceImpl.guardarUsuario(usuario);//"Usuario guardado";
-		
+		 	{
+			"nombre":"Mijail",
+			"correo":"a@a.cl",
+			"password": "secret"
+			}
+		 */
+		Boolean resultado = usuarioServiceImpl.guardarUsuario(usuario);
+		if(resultado) {//si es verdadero
+			return "Insertado correctamente"; //enviar a una vista
+		}else {
+			return "Error la crear usuario";
+		}
 	}
 	
-	@RequestMapping("/eliminar/usuario") //Ruta
-	public String eliminarUsuario(@RequestBody Long id) {
-		//Llamando al metodo eliminar en el service
-		String respuesta = usuarioServiceImpl.eliminarUsuario(id);
-		return respuesta;
-		
+	@RequestMapping("/eliminar/usuario")
+	public String eliminarUsuario(@RequestParam(value="id",required = false) Long id) {
+		//llamando el metodo eliminar en el service
+		/*String respuesta = usuarioServiceImpl.eliminarUsuario(id);
+		return respuesta;*/
+		return usuarioServiceImpl.eliminarUsuario(id);
 	}
+
 	@RequestMapping("/actualizar/usuario")
 	public String actualizarUsuario(@RequestBody Usuario usuario) {
-		//Validacion logica
+		//validacion logica
 		if(usuario.getId()!=null) {
-			String mensaje = usuarioServiceImpl.actualizarUsuario(usuario);
+			String mensaje =  usuarioServiceImpl.actualizarUsuario(usuario);
 			return mensaje;
 		}
-		return null;
+		return "No se actualizara ningun usuario";
 	}
 	
 	@RequestMapping("/obtener/usuario")
 	public Usuario obtenerUsuario(@RequestParam(value="id",required = true) Long id) {
 		
-		return usuarioServiceImpl.obetenerUsuario(id);
-		
+		return usuarioServiceImpl.obtenerUsuario(id);
 	}
-	//Listar todos los usuarios
-	@GetMapping("/listar/usuario")
+	// ahora obtenemos el usuario a partir del id
+		// http://localhost:8080/obtenerdato/usuario
+		@RequestMapping("/obtenerdato/usuario")
+		public Optional<Usuario> obtenerDatosUsuario(@RequestParam(value = "id", required = true) Long id) {
+				
+			return usuarioServiceImpl.obtenerDatosUsuario(id);
+		}
+		
+	//listar todos los usuarios
+	@GetMapping("/listar/usuarios")
 	public List<Usuario> obtenerListaUsuarios(){
-	return usuarioServiceImpl.obtenerListaUsuarios();
+		return usuarioServiceImpl.obtenerListaUsuarios();
 	}
 }
-	
-

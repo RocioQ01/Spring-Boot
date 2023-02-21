@@ -1,4 +1,3 @@
-
 package cl.generation.web.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +10,9 @@ import cl.generation.web.repositories.RolRepository;
 public class RolServiceImpl implements RolService{
 @Autowired
 RolRepository rolRepository;
-
-@Override
-public Rol obtenerRol(Long id) {
-	return null;
-}
 	
-	/*@Override
+	@Override
 	public Rol obtenerRol(Long id) {
-		return rolRepository.findById(id);
-	}*/
-
+		return rolRepository.findById(id).get();
+	}
 }
